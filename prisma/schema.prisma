@@ -22,3 +22,20 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String   @db.ObjectId
 }
+
+model Camera {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  ip_address String @unique
+  name       String?
+  location   String
+  events     Event[] @relation("CameraToEvent")
+}
+
+model Event {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  camera_id  String   @db.ObjectId
+  amount     String
+  created_at DateTime @default(now())
+
+  camera Camera @relation("CameraToEvent", fields: [camera_id], references: [id])
+}
